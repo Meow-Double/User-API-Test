@@ -25,7 +25,7 @@
       "@prisma/*": ["./prisma/*"]
     },
   },
-  "include": ["src/**/*", "src/models/*.test.ts", "src/shared/*.test.ts"],
+  "include": ["src/**/*", "src/modules/*.test.ts", "src/shared/*.test.ts"],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": true

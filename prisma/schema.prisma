@@ -9,3 +9,22 @@ datasource db {
 }
 
 
+model User {
+  id String @id @default(ulid())
+  fullName String  @map("full_name")
+  dateOfBirth DateTime @map("date_of_birth")
+  email  String @unique
+  password String
+  role  Roles @default(USER)
+  status Boolean @default(true) 
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+
+
+enum Roles {
+  USER
+  ADMIN
+}

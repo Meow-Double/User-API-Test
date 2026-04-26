@@ -19,9 +19,9 @@ FROM node:22-alpine AS production
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev  --ignore-scripts
 
-COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=build /app/prisma/generated ./prisma/generated
 COPY prisma.config.ts ./
 COPY prisma ./prisma
 

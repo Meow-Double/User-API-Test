@@ -92,9 +92,34 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  fullName: 'fullName',
+  dateOfBirth: 'dateOfBirth',
+  email: 'email',
+  password: 'password',
+  role: 'role',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SortOrder = {
+  asc: 'asc',
+  desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+exports.Roles = exports.$Enums.Roles = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
 
 exports.Prisma.ModelName = {
-
+  User: 'User'
 };
 /**
  * Create the Client
@@ -104,14 +129,14 @@ const config = {
   "clientVersion": "7.8.0",
   "engineVersion": "3c6e192761c0362d496ed980de936e2f3cebcd3a",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n"
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id          String   @id @default(ulid())\n  fullName    String   @map(\"full_name\")\n  dateOfBirth DateTime @map(\"date_of_birth\")\n  email       String   @unique\n  password    String\n  role        Roles    @default(USER)\n  status      Boolean  @default(true)\n\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n}\n\nenum Roles {\n  USER\n  ADMIN\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"full_name\"},{\"name\":\"dateOfBirth\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"date_of_birth\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Roles\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.parameterizationSchema = {
-  strings: JSON.parse("[]"),
-  graph: "AAAA"
+  strings: JSON.parse("[\"where\",\"User.findUnique\",\"User.findUniqueOrThrow\",\"orderBy\",\"cursor\",\"User.findFirst\",\"User.findFirstOrThrow\",\"User.findMany\",\"data\",\"User.createOne\",\"User.createMany\",\"User.createManyAndReturn\",\"User.updateOne\",\"User.updateMany\",\"User.updateManyAndReturn\",\"create\",\"update\",\"User.upsertOne\",\"User.deleteOne\",\"User.deleteMany\",\"having\",\"_count\",\"_min\",\"_max\",\"User.groupBy\",\"User.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"fullName\",\"dateOfBirth\",\"email\",\"password\",\"Roles\",\"role\",\"status\",\"createdAt\",\"updatedAt\",\"equals\",\"not\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"contains\",\"startsWith\",\"endsWith\",\"set\"]"),
+  graph: "MwkQDBoAACgAMBsAAAQAEBwAACgAMB0BAAAAAR4BACkAIR9AACoAISABAAAAASEBACkAISMAACsjIiQgACwAISVAACoAISZAACoAIQEAAAABACABAAAAAQAgDBoAACgAMBsAAAQAEBwAACgAMB0BACkAIR4BACkAIR9AACoAISABACkAISEBACkAISMAACsjIiQgACwAISVAACoAISZAACoAIQADAAAABAAgAwAABQAwBAAAAQAgAwAAAAQAIAMAAAUAMAQAAAEAIAMAAAAEACADAAAFADAEAAABACAJHQEAAAABHgEAAAABH0AAAAABIAEAAAABIQEAAAABIwAAACMCJCAAAAABJUAAAAABJkAAAAABAQgAAAkAIAkdAQAAAAEeAQAAAAEfQAAAAAEgAQAAAAEhAQAAAAEjAAAAIwIkIAAAAAElQAAAAAEmQAAAAAEBCAAACwAwAQgAAAsAMAkdAQAwACEeAQAwACEfQAAxACEgAQAwACEhAQAwACEjAAAyIyIkIAAzACElQAAxACEmQAAxACECAAAAAQAgCAAADgAgCR0BADAAIR4BADAAIR9AADEAISABADAAISEBADAAISMAADIjIiQgADMAISVAADEAISZAADEAIQIAAAAEACAIAAAQACACAAAABAAgCAAAEAAgAwAAAAEAIA8AAAkAIBAAAA4AIAEAAAABACABAAAABAAgAxUAAC0AIBYAAC8AIBcAAC4AIAwaAAAaADAbAAAXABAcAAAaADAdAQAbACEeAQAbACEfQAAcACEgAQAbACEhAQAbACEjAAAdIyIkIAAeACElQAAcACEmQAAcACEDAAAABAAgAwAAFgAwFAAAFwAgAwAAAAQAIAMAAAUAMAQAAAEAIAwaAAAaADAbAAAXABAcAAAaADAdAQAbACEeAQAbACEfQAAcACEgAQAbACEhAQAbACEjAAAdIyIkIAAeACElQAAcACEmQAAcACEOFQAAIAAgFgAAJwAgFwAAJwAgJwEAAAABKAEAJgAhKQEAAAAEKgEAAAAEKwEAAAABLAEAAAABLQEAAAABLgEAAAABLwEAAAABMAEAAAABMQEAAAABCxUAACAAIBYAACUAIBcAACUAICdAAAAAAShAACQAISlAAAAABCpAAAAABCtAAAAAASxAAAAAAS1AAAAAAS5AAAAAAQcVAAAgACAWAAAjACAXAAAjACAnAAAAIwIoAAAiIyIpAAAAIwgqAAAAIwgFFQAAIAAgFgAAIQAgFwAAIQAgJyAAAAABKCAAHwAhBRUAACAAIBYAACEAIBcAACEAICcgAAAAASggAB8AIQgnAgAAAAEoAgAgACEpAgAAAAQqAgAAAAQrAgAAAAEsAgAAAAEtAgAAAAEuAgAAAAECJyAAAAABKCAAIQAhBxUAACAAIBYAACMAIBcAACMAICcAAAAjAigAACIjIikAAAAjCCoAAAAjCAQnAAAAIwIoAAAjIyIpAAAAIwgqAAAAIwgLFQAAIAAgFgAAJQAgFwAAJQAgJ0AAAAABKEAAJAAhKUAAAAAEKkAAAAAEK0AAAAABLEAAAAABLUAAAAABLkAAAAABCCdAAAAAAShAACUAISlAAAAABCpAAAAABCtAAAAAASxAAAAAAS1AAAAAAS5AAAAAAQ4VAAAgACAWAAAnACAXAAAnACAnAQAAAAEoAQAmACEpAQAAAAQqAQAAAAQrAQAAAAEsAQAAAAEtAQAAAAEuAQAAAAEvAQAAAAEwAQAAAAExAQAAAAELJwEAAAABKAEAJwAhKQEAAAAEKgEAAAAEKwEAAAABLAEAAAABLQEAAAABLgEAAAABLwEAAAABMAEAAAABMQEAAAABDBoAACgAMBsAAAQAEBwAACgAMB0BACkAIR4BACkAIR9AACoAISABACkAISEBACkAISMAACsjIiQgACwAISVAACoAISZAACoAIQsnAQAAAAEoAQAnACEpAQAAAAQqAQAAAAQrAQAAAAEsAQAAAAEtAQAAAAEuAQAAAAEvAQAAAAEwAQAAAAExAQAAAAEIJ0AAAAABKEAAJQAhKUAAAAAEKkAAAAAEK0AAAAABLEAAAAABLUAAAAABLkAAAAABBCcAAAAjAigAACMjIikAAAAjCCoAAAAjCAInIAAAAAEoIAAhACEAAAABMgEAAAABATJAAAAAAQEyAAAAIwIBMiAAAAABAAAAAAMVAAYWAAcXAAgAAAADFQAGFgAHFwAIAQIBAgMBBQYBBgcBBwgBCQoBCgwCCw0DDA8BDRECDhIEERMBEhQBExUCGBgFGRkJ"
 }
 config.compilerWasm = {
   getRuntime: async () => require('./query_compiler_fast_bg.js'),

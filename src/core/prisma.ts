@@ -1,10 +1,10 @@
-import { POSTGRES_URI } from '@/config/env.js';
+import { env } from '@/shared/consts/env.js';
 import { PrismaClient } from '@prisma/generated/prisma/client.js';
 import { logger } from './logger.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 const adapter = new PrismaPg({
-  connectionString: POSTGRES_URI,
+  connectionString: env.POSTGRES_URI,
 });
 
 const prisma = new PrismaClient({ adapter });
