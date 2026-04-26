@@ -1,0 +1,6 @@
+export const ERROR_STATUS = {
+  CONFLICT_ERROR: 409,
+  UNAUTHORIZED: 401,
+  INTERNAL: 500,
+  NOT_FOUND: 404,
+} as const;

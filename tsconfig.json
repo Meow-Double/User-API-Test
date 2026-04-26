@@ -4,7 +4,7 @@
     "outDir": "./dist",
     "module": "nodenext",
     "target": "esnext",
-    "types": ["node", "vitest/globals"],
+    "types": ["node", "vitest/globals", "express"],
     "lib": ["esnext"],
     "sourceMap": true,
     "declaration": true,
@@ -25,7 +25,7 @@
       "@prisma/*": ["./prisma/*"]
     },
   },
-  "include": ["src/**/*", "src/modules/*.test.ts", "src/shared/*.test.ts"],
+  "include": ["src/**/*", "src/modules/*.test.ts", "src/shared/*.test.ts", "src/shared/types/**/*.d.ts", ],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": true

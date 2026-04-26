@@ -20,7 +20,35 @@ export class UserService {
   }
 
   async findUserByEmail(email: string) {
-    return await userRepository.firstFind({ where: { email } });
+    return await userRepository.firstFind({
+      where: { email },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        dateOfBirth: true,
+        role: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  async findUserById(userId: string) {
+    return await userRepository.firstFind({
+      where: { id: userId },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        dateOfBirth: true,
+        role: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 }
 

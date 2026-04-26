@@ -1,21 +1,19 @@
-import type { ErrorRequestHandler } from 'express';
-import type { Request, Response } from 'express';
+import { HttpError } from '@/core/http.error.js';
 import { logger } from '@/core/logger.js';
-import { HttpError } from '@/core/error/http.error.js';
-import { HTTP_STATUS } from '../consts/errors.js';
+import type { NextFunction, Request, Response } from 'express';
+import { ERROR_STATUS } from '../consts/error-status.js';
 
-export const errorHandler: ErrorRequestHandler = (err: Error, req: Request, res: Response) => {
+export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof HttpError) {
     logger.warn(
       {
         path: req.path,
         method: req.method,
-        code: err.code,
-        details: err.details,
+        message: err.message,
       },
       `HTTP Error ${err.statusCode}`,
     );
-    return res.status(err.statusCode).json(err.toJSON());
+    return res.status(err.statusCode).json(err.toJson());
   }
 
   logger.error(
@@ -28,11 +26,13 @@ export const errorHandler: ErrorRequestHandler = (err: Error, req: Request, res:
     'Unhandled error',
   );
 
-  return res.status(HTTP_STATUS.INTERNAL).json({
+  res.status(ERROR_STATUS.INTERNAL).json({
     success: false,
     error: {
       code: 'INTERNAL_ERROR',
       message: 'Внутренняя ошибка сервера',
     },
   });
+
+  next(err);
 };
