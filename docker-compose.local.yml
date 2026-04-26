@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: user
+    ports:
+      - '5433:5432'
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data'
+    healthcheck: 
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d user']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build: .
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    command: >
+      sh -c "npx prisma migrate deploy && node dist/src/main.js"
+
+volumes:
+  pgdata:
