@@ -141,9 +141,14 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
-exports.Roles = exports.$Enums.Roles = {
+exports.UserRoles = exports.$Enums.UserRoles = {
   USER: 'USER',
   ADMIN: 'ADMIN'
+};
+
+exports.UserStatus = exports.$Enums.UserStatus = {
+  ACTIVE: 'ACTIVE',
+  BLOCKED: 'BLOCKED'
 };
 
 exports.Prisma.ModelName = {

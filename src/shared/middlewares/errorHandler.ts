@@ -26,7 +26,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
     'Unhandled error',
   );
 
-  res.status(ERROR_STATUS.INTERNAL).json({
+  res.status(ERROR_STATUS.INTERNAL_ERROR).json({
     success: false,
     error: {
       code: 'INTERNAL_ERROR',

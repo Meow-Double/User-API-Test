@@ -5,11 +5,17 @@ import { logger } from '@/core/logger.js';
 
 import type { LoginBody } from './dtos/authLogin.dto.js';
 import bcrypt from 'bcrypt';
-import { ConflictError, NotFoundError, UnauthorizedError } from '@/core/http.error.js';
+import {
+  ConflictError,
+  ForbiddenError,
+  NotFoundError,
+  UnauthorizedError,
+} from '@/core/http.error.js';
+import { UserStatus } from '@prisma/generated/prisma/index.js';
 
 export class AuthService {
   async register(input: RegisterBody) {
-    const existingUser = await userService.findUserByEmail(input.email);
+    const existingUser = await userService.findUser({ email: input.email });
 
     if (existingUser) {
       throw new ConflictError('Пользователь с таким email уже зарегистрирован');
@@ -21,7 +27,10 @@ export class AuthService {
       `Пользователь ${createdUser.fullName} успещно зарегестрировался`,
     );
 
-    const accessToken = jwtService.generateAccessToken(createdUser.id);
+    const accessToken = jwtService.generateAccessToken({
+      role: createdUser.role,
+      userId: createdUser.id,
+    });
     const refreshToken = jwtService.generateRefreshToken(createdUser.id);
 
     return { createdUser, accessToken, refreshToken };
@@ -29,10 +38,14 @@ export class AuthService {
 
   async login(input: LoginBody) {
     const { email, password } = input;
-    const user = await userService.findUserByEmail(email);
+    const user = await userService.findUser({ email }, true);
 
     if (!user) {
       throw new UnauthorizedError('Неверный email или пароль');
+    }
+
+    if (user.status === UserStatus.BLOCKED) {
+      throw new ForbiddenError(`Аккаунт заблокирован. Обратитесь в поддержку`);
     }
 
     const isValidPSW = await bcrypt.compare(password, user.password);
@@ -41,7 +54,10 @@ export class AuthService {
       throw new UnauthorizedError('Неверный email или пароль');
     }
 
-    const accessToken = jwtService.generateAccessToken(user.id);
+    const accessToken = jwtService.generateAccessToken({
+      role: user.role,
+      userId: user.id,
+    });
     const refreshToken = jwtService.generateRefreshToken(user.id);
 
     logger.info({ id: user.id }, `Пользователь ${user.fullName} успещно авторизовался`);
@@ -54,7 +70,7 @@ export class AuthService {
       throw new UnauthorizedError('Необходима авторизация (Bearer token)');
     }
 
-    const user = await userService.findUserById(userId);
+    const user = await userService.findUser({ id: userId });
 
     if (!user) {
       throw new NotFoundError('Пользователь отсуствует');
@@ -68,13 +84,16 @@ export class AuthService {
       throw new UnauthorizedError('Необходима авторизация (Bearer token)');
     }
 
-    const user = await userService.findUserById(userId);
+    const user = await userService.findUser({ id: userId });
 
     if (!user) {
       throw new NotFoundError('Пользователь отсуствует');
     }
 
-    const accessToken = jwtService.generateAccessToken(user.id);
+    const accessToken = jwtService.generateAccessToken({
+      role: user.role,
+      userId: user.id,
+    });
     const refreshToken = jwtService.generateRefreshToken(user.id);
 
     return { accessToken, refreshToken };

@@ -18,7 +18,10 @@ export const jwtAuth = (req: Request, _: Response, next: NextFunction) => {
 
     const payload = jwtService.verifyAccess(token);
 
-    req.userId = payload.userId;
+    req.user = {
+      id: payload.userId,
+      role: payload.role,
+    };
 
     next();
   } catch (error) {

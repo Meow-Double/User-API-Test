@@ -8,6 +8,12 @@ export class UserRepository {
   firstFind(args: Prisma.UserFindFirstArgs): Promise<User | null> {
     return prisma.user.findFirst(args);
   }
+  findMany(args: Prisma.UserFindManyArgs): Promise<User[] | null> {
+    return prisma.user.findMany(args);
+  }
+  update(args: Prisma.UserUpdateArgs): Promise<User | null> {
+    return prisma.user.update(args);
+  }
 }
 
 export const userRepository = new UserRepository();

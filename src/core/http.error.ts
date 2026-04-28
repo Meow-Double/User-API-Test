@@ -26,12 +26,23 @@ export class ConflictError extends HttpError {
 
 export class UnauthorizedError extends HttpError {
   constructor(public message: string) {
-    super(ERROR_STATUS.UNAUTHORIZED, message);
+    super(ERROR_STATUS.UNAUTHORIZED_ERROR, message);
   }
 }
 
 export class NotFoundError extends HttpError {
   constructor(public message: string) {
-    super(ERROR_STATUS.NOT_FOUND, message);
+    super(ERROR_STATUS.NOT_FOUND_ERROR, message);
+  }
+}
+
+export class BadRequestError extends HttpError {
+  constructor(public message: string) {
+    super(ERROR_STATUS.BAD_REQUEST_ERROR, message);
+  }
+}
+export class ForbiddenError extends HttpError {
+  constructor(public message: string) {
+    super(ERROR_STATUS.BAD_REQUEST_ERROR, message);
   }
 }

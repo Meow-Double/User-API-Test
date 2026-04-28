@@ -11,28 +11,30 @@ const options: swaggerJsdoc.Options = {
       title: 'User API',
       version: pkg.version,
     },
+    tags: [
+      { name: 'Auth', description: 'Регистрация и авторизация' },
+      { name: 'Users', description: 'Управление пользователями' },
+    ],
     components: {
-      securitySchemas: {
+      securitySchemes: {
         bearerAuth: {
           type: 'http',
-          schema: 'bearer',
+          scheme: 'bearer',
           bearerFormat: 'JWT',
+          description:
+            'Введите access token в формате: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`',
         },
       },
     },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
   },
-  apis: ['./src/modules/**/*.routes.ts'],
+  apis: ['./src/modules/**/*.doc.ts'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
 function swaggerDocs(app: Express) {
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
   logger.info(`Swagger успешно запущен по маршруту /docs`);
 
   app.get('docs.json', (req: Request, res: Response) => {

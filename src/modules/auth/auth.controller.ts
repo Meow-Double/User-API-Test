@@ -19,7 +19,7 @@ class AuthController {
 
     return res.status(201).json({
       success: true,
-      message: 'User registered',
+      message: 'Пользователь успешно зарегестрировался',
       data: { accessToken, user: { id: createdUser.id, email: createdUser.email } },
     });
   }
@@ -37,13 +37,13 @@ class AuthController {
 
     return res.status(201).json({
       success: true,
-      message: 'User login',
+      message: 'Пользователь успешно авторизовался',
       data: { accessToken, user: { id: user.id, email: user.email } },
     });
   }
 
   public async me(req: Request, res: Response) {
-    const userId = req.userId;
+    const userId = req.user.id;
 
     const user = await authService.me(userId);
 
@@ -54,7 +54,7 @@ class AuthController {
   }
 
   public async refresh(req: Request, res: Response) {
-    const userId = req.userId;
+    const userId = req.user.id;
 
     const { accessToken, refreshToken } = await authService.refresh(userId);
 

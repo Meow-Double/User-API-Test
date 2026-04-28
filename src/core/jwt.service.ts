@@ -1,16 +1,18 @@
 import { env } from '@/shared/consts/env.js';
 import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from './http.error.js';
+import type { UserRoles } from '@prisma/generated/prisma/index.js';
 
 export interface JwtType extends jwt.JwtPayload {
   userId: string;
+  userRole: UserRoles;
 }
 
 export class JwtService {
-  public generateAccessToken(userId: string) {
+  public generateAccessToken(data: { userId: string; role: UserRoles }) {
     const token = jwt.sign(
       {
-        userId,
+        ...data,
       },
       env.JWT_ACCESS_SECRET,
       {

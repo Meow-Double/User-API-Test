@@ -7,6 +7,7 @@ import { connectDB } from '@/core/prisma.js';
 
 import { authRouter } from './modules/auth/auth.routes.js';
 import { errorHandler } from './shared/middlewares/errorHandler.js';
+import { userRouter } from './modules/user/user.routes.js';
 
 async function main() {
   await connectDB();
@@ -24,6 +25,7 @@ async function main() {
   app.use(express.json());
 
   app.use('/api/auth', authRouter);
+  app.use('/api/users', userRouter);
 
   app.use(errorHandler);
 
