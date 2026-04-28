@@ -80,23 +80,27 @@ export class UserService {
     const safeLimit = Math.min(Math.max(1, Math.floor(limit)), 100);
     const skip = (safePage - 1) * safeLimit;
 
-    const list = await userRepository.findMany({
-      skip,
-      take: safeLimit,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        fullName: true,
-        email: true,
-        dateOfBirth: true,
-        role: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+    const [list, total] = await Promise.all([
+      userRepository.findMany({
+        skip,
+        take: safeLimit,
+        orderBy: { createdAt: 'desc' },
+        select: {
+          id: true,
+          fullName: true,
+          email: true,
+          dateOfBirth: true,
+          role: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      }),
 
-    return list;
+      userRepository.userCount(),
+    ]);
+
+    return { data: list, meta: { total } };
   }
 
   async userBlock(targetId: string, requesterId: string, requesterRole: UserRoles) {

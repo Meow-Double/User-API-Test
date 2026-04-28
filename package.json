@@ -11,9 +11,6 @@
     "lint": "npx eslint ./src",
     "lint:fix": "npx eslint ./src --fix",
     "format": "prettier --write \"src/**/*.{ts,json}\"",
-    "test:unit": "vitest",
-    "test:ui": "vitest --ui",
-    "test:cov": "vitest run --coverage",
     "db:setup": "prisma generate && prisma migrate dev",
     "db:migrate": "prisma migrate deploy",
     "db:generate": "prisma db push && prisma generate",
@@ -38,8 +35,6 @@
     "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.59.0",
     "@typescript-eslint/parser": "^8.59.0",
-    "@vitest/coverage-v8": "^4.1.5",
-    "@vitest/ui": "^4.1.5",
     "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
@@ -51,8 +46,7 @@
     "tsc-alias": "^1.8.16",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.0",
-    "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.5"
+    "vite-tsconfig-paths": "^6.1.1"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

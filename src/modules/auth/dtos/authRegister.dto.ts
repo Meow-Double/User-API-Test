@@ -6,8 +6,8 @@ export const authRegisterDto = z.object({
   fullName: z
     .string()
     .trim()
-    .min(3, 'ФИО должно содержать минимум 3 символа')
-    .max(100, 'ФИО слишком длинное')
+    .min(8, 'ФИО должно содержать минимум 8 символов')
+    .max(60, 'ФИО слишком длинное')
     .regex(fullNameRegex, 'ФИО должно содержать только буквы, пробелы, дефисы и апострофы')
     .refine(
       (val) => val.split(/\s+/).filter(Boolean).length >= 2,

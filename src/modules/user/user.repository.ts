@@ -14,6 +14,9 @@ export class UserRepository {
   update(args: Prisma.UserUpdateArgs): Promise<User | null> {
     return prisma.user.update(args);
   }
+  userCount(): Promise<number> {
+    return prisma.user.count();
+  }
 }
 
 export const userRepository = new UserRepository();
