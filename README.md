@@ -37,7 +37,7 @@ docker compose exec api npx prisma generate
 
 &nbsp;
 
-4. Примените миграции Prisma (выполняется внутри контейнера)
+4. Проверьте статус
 
 ```bash
 docker compose ps
@@ -54,9 +54,10 @@ docker compose ps
 Убедитесь, что в `.env` указаны следующие параметры:
 
 ```bash
-POSTGRES_URI=postgresql://postgres:root@postgres:5432/user
+POSTGRES_URI=postgresql://postgres:dev_password_123@localhost:5432/userapi
 
-PORT = "3000"
+
+PORT=5000
 NODE_ENV = "development"
 CORS_ORIGIN="*"
 
@@ -65,6 +66,7 @@ JWT_ACCESS_SECRET="access-secret"
 JWT_ACCESS_EXPIRES="1d"
 JWT_REFRESH_SECRET="refresh-secret"
 JWT_REFRESH_EXPIRES="15d"
+
 ```
 
 &nbsp;
@@ -215,7 +217,7 @@ const result = await response.json();
 
 ### 🔄 Обновление JWT токенов
 
-#### `POST /api/auth/refresh` — Получение информации пользователя
+#### `GET /api/auth/refresh` — Получение информации пользователя
 
 Обновление пары токенов. Читает Refresh Token из cookie и генерирует новую пару.
 
@@ -273,7 +275,7 @@ const result = await response.json();
 
 ### 🔎 Получение пользователя по id
 
-#### `POST /api/users/:id` — Получение профиля пользователя по ID
+#### `GET /api/users/:id` — Получение профиля пользователя по ID
 
 
   👤 **USER** (Пользователь): Может получить данные только своего аккаунта. Если в параметре :id указан чужой ID — вернётся ошибка 403.
@@ -354,7 +356,7 @@ curl -X GET http://localhost:4000/api/users/01KQ999999999999999999999999 \
 
 ### 👥 Получение всех пользователей (для `ADMIN`)
 
-#### `POST /api/users` — Получение списка пользователей
+#### `GET /api/users` — Получение списка пользователей
 
 Получение списка всех пользователей с пагинацией
 

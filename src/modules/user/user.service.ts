@@ -124,7 +124,7 @@ export class UserService {
       select: { id: true },
     });
 
-    logger.info({ id }, `Пользователь был заблокиров`);
+    logger.info({ id }, `Пользователь был заблокирован`);
     return { status: 'success', message: 'Пользователь успешно заблокирован' };
   }
 }
