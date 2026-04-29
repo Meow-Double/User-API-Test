@@ -44,8 +44,8 @@ docker compose ps
 ```
 &nbsp;
 
-✅ API доступен: [http://localhost:4000](http://localhost:4000) \
-📖 Swagger UI: [http://localhost:4000/docs](http://localhost:4000/dosc)
+✅ API доступен: [http://localhost:5000](http://localhost:5000) \
+📖 Swagger UI: [http://localhost:5000/docs](http://localhost:5000/dosc)
 
 &nbsp;
 
